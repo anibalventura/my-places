@@ -1,5 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <style name="ThemeToolbar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:textColorPrimary">@color/secondaryTextColor</item>
+        <item name="colorControlNormal">@color/secondaryTextColor</item>
+        <item name="backgroundTint">@color/backgroundColor</item>
+    </style>
+
     <style name="ThemeApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/secondaryTextColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>

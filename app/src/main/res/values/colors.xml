@@ -4,4 +4,5 @@
     <color name="primaryDarkColor">#25B7D3</color>
     <color name="primaryTextColor">#FFFFFF</color>
     <color name="secondaryTextColor">#151515</color>
+    <color name="backgroundColor">#FFFFFF</color>
 </resources>

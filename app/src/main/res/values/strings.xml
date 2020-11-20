@@ -2,4 +2,15 @@
     <string name="app_name">My Places</string>
     <string name="places_floating_button">Floating Button</string>
     <string name="add_place">Add Place</string>
+    <string name="add_place_input_title">Title</string>
+    <string name="add_place_input_description">Description</string>
+    <string name="add_place_input_date">Date</string>
+    <string name="add_place_add_image">Add Image</string>
+    <string name="add_place_btn_save">Save</string>
+    <string name="add_place_input_location">Location</string>
+    <string name="permission_granted_storage">Storage READ/WRITE permission are granted. Now you can select an image from gallery.</string>
+    <string name="dialog_permission_denied">Permission Denied</string>
+    <string name="dialog_permission_denied_msg">You denied a permission required for this feature. It can be enabled under the Applications Settings.</string>
+    <string name="dialog_go_to_settings">GO TO SETTINGS</string>
+    <string name="dialog_cancel">Cancel</string>
 </resources>

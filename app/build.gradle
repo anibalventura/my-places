@@ -83,4 +83,8 @@ dependencies {
     // Material Dialogs
     implementation "com.afollestad.material-dialogs:core:$material_dialogs_version"
     implementation "com.afollestad.material-dialogs:bottomsheets:$material_dialogs_version"
+    implementation "com.afollestad.material-dialogs:datetime:$material_dialogs_version"
+
+    // Dexter (Permission handler)
+    implementation 'com.karumi:dexter:6.2.2'
 }

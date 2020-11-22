@@ -50,30 +50,7 @@ class AddPlaceFragment : Fragment() {
         return binding.root
     }
 
-    /** ===================================== Complete fields and save. ===================================== **/
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when {
-            resultCode == Activity.RESULT_OK && requestCode == GALLERY_REQUEST_CODE -> {
-                try {
-                    when {
-                        data!!.data != null -> binding.ivPlaceImage.setImageURI(data.data)
-                    }
-                } catch (e: IOException) {
-                    snackBarMsg(requireView(), e.printStackTrace().toString())
-                }
-            }
-            resultCode == Activity.RESULT_OK && requestCode == CAMERA_REQUEST_CODE -> {
-                try {
-                    binding.ivPlaceImage.setImageBitmap(data!!.extras!!.get("data") as Bitmap)
-                } catch (e: IOException) {
-                    snackBarMsg(requireView(), e.printStackTrace().toString())
-                }
-            }
-        }
-    }
+    /** ===================================== Complete Fields. ===================================== **/
 
     private fun pickDate() {
         binding.etDate.setOnClickListener {
@@ -102,27 +79,25 @@ class AddPlaceFragment : Fragment() {
         }
     }
 
-    private fun takePhotoFromCamera() {
-        Dexter.withContext(requireContext()).withPermissions(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.CAMERA
-        ).withListener(object : MultiplePermissionsListener {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-            override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                if (report!!.areAllPermissionsGranted()) {
-                    val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    startActivityForResult(takePhotoIntent, CAMERA_REQUEST_CODE)
+        when (resultCode == Activity.RESULT_OK) {
+            requestCode == GALLERY_REQUEST_CODE -> {
+                try {
+                    if (data!!.data != null) binding.ivPlaceImage.setImageURI(data.data)
+                } catch (e: IOException) {
+                    snackBarMsg(requireView(), e.printStackTrace().toString())
                 }
             }
-
-            override fun onPermissionRationaleShouldBeShown(
-                permissions: MutableList<PermissionRequest>, token: PermissionToken
-            ) {
-                showPermissionDeniedDialog()
+            requestCode == CAMERA_REQUEST_CODE -> {
+                try {
+                    binding.ivPlaceImage.setImageBitmap(data!!.extras!!.get("data") as Bitmap)
+                } catch (e: IOException) {
+                    snackBarMsg(requireView(), e.printStackTrace().toString())
+                }
             }
-
-        }).onSameThread().check()
+        }
     }
 
     private fun pickImageFromGallery() {
@@ -138,6 +113,29 @@ class AddPlaceFragment : Fragment() {
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                     )
                     startActivityForResult(pickImageIntent, GALLERY_REQUEST_CODE)
+                }
+            }
+
+            override fun onPermissionRationaleShouldBeShown(
+                permissions: MutableList<PermissionRequest>, token: PermissionToken
+            ) {
+                showPermissionDeniedDialog()
+            }
+
+        }).onSameThread().check()
+    }
+
+    private fun takePhotoFromCamera() {
+        Dexter.withContext(requireContext()).withPermissions(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA
+        ).withListener(object : MultiplePermissionsListener {
+
+            override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                if (report!!.areAllPermissionsGranted()) {
+                    val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    startActivityForResult(takePhotoIntent, CAMERA_REQUEST_CODE)
                 }
             }
 

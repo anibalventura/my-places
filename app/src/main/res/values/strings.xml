@@ -12,4 +12,8 @@
     <string name="dialog_permission_denied_msg">You denied a permission required for this feature. It can be enabled under the Applications Settings.</string>
     <string name="dialog_go_to_settings">GO TO SETTINGS</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="place_image">Place Image</string>
+    <string name="no_places">No Places</string>
+    <string name="place_no_data">Start to add your places!</string>
+    <string name="place_detail">Place Detail</string>
 </resources>

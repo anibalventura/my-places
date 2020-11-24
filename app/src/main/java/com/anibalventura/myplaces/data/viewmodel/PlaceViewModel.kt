@@ -3,6 +3,7 @@ package com.anibalventura.myplaces.data.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.anibalventura.myplaces.data.db.PlaceDatabase
 import com.anibalventura.myplaces.data.model.PlaceModel
@@ -44,5 +45,13 @@ class PlaceViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteDatabase()
         }
+    }
+
+    /** ========================= Check for empty database. ========================= **/
+
+    val emptyDatabase: MutableLiveData<Boolean> = MutableLiveData(false)
+
+    fun checkIfPlacesIsEmpty(placeData: List<PlaceModel>) {
+        emptyDatabase.value = placeData.isEmpty()
     }
 }

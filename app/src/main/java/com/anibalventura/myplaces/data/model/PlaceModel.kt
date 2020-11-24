@@ -1,10 +1,13 @@
 package com.anibalventura.myplaces.data.model
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.android.parcel.Parcelize
 
 @Entity(tableName = "place_table")
+@Parcelize
 class PlaceModel(
     @PrimaryKey(autoGenerate = true)
     var id: Long,
@@ -29,4 +32,4 @@ class PlaceModel(
 
     @ColumnInfo(name = "image")
     val image: String,
-)
+) : Parcelable

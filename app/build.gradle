@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
+    id "androidx.navigation.safeargs.kotlin"
 }
 
 android {
@@ -84,6 +85,9 @@ dependencies {
     implementation "com.afollestad.material-dialogs:core:$material_dialogs_version"
     implementation "com.afollestad.material-dialogs:bottomsheets:$material_dialogs_version"
     implementation "com.afollestad.material-dialogs:datetime:$material_dialogs_version"
+
+    // Circle Image View
+    implementation 'de.hdodenhof:circleimageview:3.0.1'
 
     // Dexter (Permission handler)
     implementation 'com.karumi:dexter:6.2.2'

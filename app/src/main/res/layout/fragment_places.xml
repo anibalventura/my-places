@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout
+    <data>
+
+        <variable
+            name="placeViewModel"
+            type="com.anibalventura.myplaces.data.viewmodel.PlaceViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.PlacesFragment">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/placeRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="top|start"
+            android:clipToPadding="false"
+            android:paddingTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabPlaces"
@@ -16,6 +36,36 @@
             android:clickable="true"
             android:contentDescription="@string/places_floating_button"
             android:focusable="true"
-            android:src="@drawable/ic_add" />
-    </FrameLayout>
+            android:navigateToPlaceAddFragment="@{true}"
+            android:src="@drawable/ic_add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivNoNotes"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:contentDescription="@string/no_places"
+            android:emptyDatabase="@{placeViewModel.emptyDatabase}"
+            android:src="@drawable/ic_location"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/placeRecyclerView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.40"
+            app:tint="@color/primaryColor" />
+
+        <TextView
+            android:id="@+id/tvNoNotes"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:emptyDatabase="@{placeViewModel.emptyDatabase}"
+            android:text="@string/place_no_data"
+            android:textSize="18sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivNoNotes" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

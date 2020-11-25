@@ -14,18 +14,20 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.datetime.datePicker
 import com.afollestad.materialdialogs.list.listItems
 import com.anibalventura.myplaces.R
+import com.anibalventura.myplaces.adapters.PlaceAdapter
 import com.anibalventura.myplaces.data.model.PlaceModel
 import com.anibalventura.myplaces.data.viewmodel.PlaceViewModel
-import com.anibalventura.myplaces.databinding.FragmentAddPlaceBinding
+import com.anibalventura.myplaces.databinding.FragmentEditPlaceBinding
 import com.anibalventura.myplaces.utils.Constants.CAMERA_REQUEST_CODE
 import com.anibalventura.myplaces.utils.Constants.GALLERY_REQUEST_CODE
-import com.anibalventura.myplaces.utils.Constants.PLACE_ADDING
+import com.anibalventura.myplaces.utils.Constants.PLACE_EDITING
 import com.anibalventura.myplaces.utils.discardDialog
 import com.anibalventura.myplaces.utils.permissionDeniedDialog
 import com.anibalventura.myplaces.utils.saveImageToInternalStorage
@@ -39,23 +41,45 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddPlaceFragment : Fragment() {
+class EditPlaceFragment : Fragment() {
 
-    private var _binding: FragmentAddPlaceBinding? = null
+    private var _binding: FragmentEditPlaceBinding? = null
     private val binding get() = _binding!!
 
     private val placeViewModel: PlaceViewModel by viewModels()
 
+    private lateinit var currentItem: PlaceModel
+    private lateinit var placeItem: PlaceModel
     private var image: Uri? = null
-    private var latitude: Double = 0.0
-    private var longitude: Double = 0.0
+
+    private val args by navArgs<EditPlaceFragmentArgs>()
+
+    private val adapter: PlaceAdapter by lazy { PlaceAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAddPlaceBinding.inflate(inflater, container, false)
-        binding.addPlaceFragment = this
+
+        _binding = FragmentEditPlaceBinding.inflate(inflater, container, false)
+        binding.args = args
+        binding.editPlaceFragment = this
         binding.lifecycleOwner = this
+
+        placeViewModel.getDatabase.observe(viewLifecycleOwner, { data ->
+            placeViewModel.checkIfPlacesIsEmpty(data)
+            adapter.setData(data)
+        })
+
+        placeItem = PlaceModel(
+            args.currentItem.id,
+            args.currentItem.title,
+            args.currentItem.description,
+            args.currentItem.date,
+            args.currentItem.location,
+            args.currentItem.latitude,
+            args.currentItem.longitude,
+            args.currentItem.image
+        )
 
         onBackPressed()
 
@@ -78,7 +102,7 @@ class AddPlaceFragment : Fragment() {
                             )
 
                         image = saveImageToInternalStorage(requireContext(), pickedImageBitmap)
-                        binding.ivPlaceImage.setImageURI(dataUri)
+                        binding.ivEditImage.setImageURI(dataUri)
                     }
                 } catch (e: IOException) {
                     snackBarMsg(requireView(), e.printStackTrace().toString())
@@ -89,7 +113,7 @@ class AddPlaceFragment : Fragment() {
                     val dataBitmap = data!!.extras!!.get("data") as Bitmap
 
                     image = saveImageToInternalStorage(requireContext(), dataBitmap)
-                    binding.ivPlaceImage.setImageBitmap(dataBitmap)
+                    binding.ivEditImage.setImageBitmap(dataBitmap)
                 } catch (e: IOException) {
                     snackBarMsg(requireView(), e.printStackTrace().toString())
                 }
@@ -145,18 +169,18 @@ class AddPlaceFragment : Fragment() {
         }).onSameThread().check()
     }
 
-    /** ===================================== Add place. ===================================== **/
+    /** ===================================== Edit place. ===================================== **/
 
     fun pickDate() {
         MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
             datePicker { _, date ->
                 val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-                binding.etDate.setText(sdf.format(date.time).toString())
+                binding.etEditDate.setText(sdf.format(date.time).toString())
             }
         }
     }
 
-    fun addImage() {
+    fun editImage() {
         val actionsItems = listOf("Add from gallery", "Capture from camera")
 
         MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
@@ -170,35 +194,26 @@ class AddPlaceFragment : Fragment() {
         }
     }
 
-    fun savePlace() {
-        when {
-            binding.etTitle.text.isNullOrEmpty() -> snackBarMsg(
-                requireView(), "Please enter a Title."
-            )
-            binding.etDescription.text.isNullOrEmpty() -> snackBarMsg(
-                requireView(), "Please enter a Description."
-            )
-            binding.etDate.text.isNullOrEmpty() -> snackBarMsg(
-                requireView(), "Please enter a Date."
-            )
-            binding.etLocation.text.isNullOrEmpty() -> snackBarMsg(
-                requireView(), "Please enter a Location."
-            )
-            image == null -> snackBarMsg(requireView(), "Please add an Image.")
-            else -> {
-                val placeModel = PlaceModel(
-                    0, binding.etTitle.text.toString(),
-                    binding.etDescription.text.toString(),
-                    binding.etDate.text.toString(),
-                    binding.etLocation.text.toString(),
-                    longitude, latitude, image.toString()
-                )
-
-                placeViewModel.insertItem(placeModel)
-                findNavController().navigate(R.id.action_addPlaceFragment_to_placesFragment)
-                snackBarMsg(requireView(), "Place added.")
-            }
+    fun updatePlace() {
+        if (image == null) {
+            image = Uri.parse(args.currentItem.image)
         }
+
+        currentItem = PlaceModel(
+            args.currentItem.id,
+            binding.etEditTitle.text.toString(),
+            binding.etEditDescription.text.toString(),
+            binding.etEditDate.text.toString(),
+            binding.etEditLocation.text.toString(),
+            args.currentItem.latitude,
+            args.currentItem.longitude,
+            image.toString()
+        )
+
+        placeViewModel.updateItem(currentItem)
+
+        snackBarMsg(requireView(), getString(R.string.update_successful))
+        findNavController().navigate(R.id.action_editPlaceFragment_to_placesFragment)
     }
 
     /** ===================================== Fragment exit/close ===================================== **/
@@ -207,13 +222,28 @@ class AddPlaceFragment : Fragment() {
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    discardDialog(PLACE_ADDING, requireContext(), requireView())
+                    currentItem = PlaceModel(
+                        args.currentItem.id,
+                        binding.etEditTitle.text.toString(),
+                        binding.etEditDescription.text.toString(),
+                        binding.etEditDate.text.toString(),
+                        binding.etEditLocation.text.toString(),
+                        args.currentItem.latitude,
+                        args.currentItem.longitude,
+                        image.toString()
+                    )
+                    when {
+                        currentItem != placeItem -> {
+                            discardDialog(PLACE_EDITING, requireContext(), requireView())
+                        }
+                        else -> findNavController().navigate(R.id.action_editPlaceFragment_to_placesFragment)
+                    }
                 }
             })
     }
 
     override fun onDestroy() {
-        _binding = null
         super.onDestroy()
+        _binding = null
     }
 }

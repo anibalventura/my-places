@@ -15,7 +15,7 @@
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_place_image"
+            android:id="@+id/ivDetailImage"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
@@ -40,7 +40,7 @@
             app:layout_constraintBottom_toTopOf="@+id/tvDetailDescription"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_place_image"
+            app:layout_constraintTop_toBottomOf="@+id/ivDetailImage"
             app:layout_constraintVertical_bias="0.0"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="Title" />
@@ -55,7 +55,7 @@
             android:text="@{args.currentItem.description}"
             android:textColor="@color/secondaryTextColor"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/tvDeatilLocation"
+            app:layout_constraintBottom_toTopOf="@+id/tvDetailLocation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.533"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +65,7 @@
             tools:text="Description" />
 
         <TextView
-            android:id="@+id/tvDeatilLocation"
+            android:id="@+id/tvDetailLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

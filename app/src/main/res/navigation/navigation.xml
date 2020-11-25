@@ -18,6 +18,10 @@
             android:id="@+id/action_placesFragment_to_placeDetailFragment"
             app:destination="@id/placeDetailFragment"
             app:popUpTo="@id/placesFragment" />
+        <action
+            android:id="@+id/action_placesFragment_to_editPlaceFragment"
+            app:destination="@id/editPlaceFragment"
+            app:popUpTo="@id/placesFragment" />
     </fragment>
     <fragment
         android:id="@+id/addPlaceFragment"
@@ -35,6 +39,18 @@
         tools:layout="@layout/fragment_place_detail">
         <action
             android:id="@+id/action_placeDetailFragment_to_placesFragment"
+            app:destination="@id/placesFragment" />
+        <argument
+            android:name="currentItem"
+            app:argType="com.anibalventura.myplaces.data.model.PlaceModel" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPlaceFragment"
+        android:name="com.anibalventura.myplaces.ui.EditPlaceFragment"
+        android:label="@string/edit_place"
+        tools:layout="@layout/fragment_edit_place">
+        <action
+            android:id="@+id/action_editPlaceFragment_to_placesFragment"
             app:destination="@id/placesFragment" />
         <argument
             android:name="currentItem"

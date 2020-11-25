@@ -16,4 +16,13 @@
     <string name="no_places">No Places</string>
     <string name="place_no_data">Start to add your places!</string>
     <string name="place_detail">Place Detail</string>
+    <string name="edit_place">Edit Place</string>
+    <string name="dialog_discard">Discard changes?</string>
+    <string name="dialog_discard_confirmation">Are you sure? Your changes won\'t be save.</string>
+    <string name="dialog_discard_successful">Changes discarded</string>
+    <string name="dialog_confirmation">Yes</string>
+    <string name="dialog_negative" translatable="false">No</string>
+    <string name="update_successful">Successfully updated.</string>
+    <string name="edit_place_btn_update">Update</string>
+    <string name="dialog_place_not_saved">Place not saved.</string>
 </resources>

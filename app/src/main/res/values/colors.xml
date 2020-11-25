@@ -4,5 +4,11 @@
     <color name="primaryDarkColor">#25B7D3</color>
     <color name="primaryTextColor">#FFFFFF</color>
     <color name="secondaryTextColor">#151515</color>
+    <color name="iconColor">#151515</color>
     <color name="backgroundColor">#FFFFFF</color>
+
+    <!-- Swipe -->
+    <color name="swipeIconColor">#FFFFFF</color>
+    <color name="swipeDeleteColor">#FF3E3E</color>
+    <color name="swipeArchiveColor">#6CBD59</color>
 </resources>

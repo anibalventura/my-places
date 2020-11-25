@@ -9,7 +9,7 @@ import com.anibalventura.myplaces.databinding.RecyclerviewPlaceBinding
 
 class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.MyViewHolder>() {
 
-    private var dataList = emptyList<PlaceModel>()
+    var dataList = emptyList<PlaceModel>()
 
     class MyViewHolder(private val binding: RecyclerviewPlaceBinding) :
         RecyclerView.ViewHolder(binding.root) {

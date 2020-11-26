@@ -92,7 +92,8 @@ dependencies {
     // Dexter (Permission handler)
     implementation 'com.karumi:dexter:6.2.2'
 
-    // Google Maps
+    // Google Maps - Location
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.libraries.places:places:2.4.0'
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
 }

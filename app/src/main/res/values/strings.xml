@@ -30,4 +30,5 @@
     <string name="successfully_deleted_forever">Successfully deleted forever.</string>
     <string name="edit_place_change_image">Change Image</string>
     <string name="place_detail_btn_view_map">View On Map</string>
+    <string name="add_place_btn_current_location">Add Current Location</string>
 </resources>

@@ -1,16 +1,25 @@
 package com.anibalventura.myplaces.ui
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Looper
 import android.provider.MediaStore
+import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -23,14 +32,12 @@ import com.anibalventura.myplaces.R
 import com.anibalventura.myplaces.data.model.PlaceModel
 import com.anibalventura.myplaces.data.viewmodel.PlaceViewModel
 import com.anibalventura.myplaces.databinding.FragmentAddPlaceBinding
+import com.anibalventura.myplaces.utils.*
 import com.anibalventura.myplaces.utils.Constants.CAMERA_REQUEST_CODE
 import com.anibalventura.myplaces.utils.Constants.GALLERY_REQUEST_CODE
 import com.anibalventura.myplaces.utils.Constants.PLACE_ADDING
 import com.anibalventura.myplaces.utils.Constants.PLACE_REQUEST_CODE
-import com.anibalventura.myplaces.utils.discardDialog
-import com.anibalventura.myplaces.utils.permissionDeniedDialog
-import com.anibalventura.myplaces.utils.saveImageToInternalStorage
-import com.anibalventura.myplaces.utils.snackBarMsg
+import com.google.android.gms.location.*
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
@@ -55,12 +62,16 @@ class AddPlaceFragment : Fragment() {
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddPlaceBinding.inflate(inflater, container, false)
         binding.addPlaceFragment = this
         binding.lifecycleOwner = this
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         if (!Places.isInitialized()) {
             Places.initialize(requireContext(), getString(R.string.google_maps_key))
@@ -71,7 +82,7 @@ class AddPlaceFragment : Fragment() {
         return binding.root
     }
 
-    /** ===================================== Handle Permissions. ===================================== **/
+    /** ===================================== Permissions. ===================================== **/
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -123,8 +134,7 @@ class AddPlaceFragment : Fragment() {
             override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                 if (report!!.areAllPermissionsGranted()) {
                     val pickImageIntent = Intent(
-                        Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                        Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                     )
                     startActivityForResult(pickImageIntent, GALLERY_REQUEST_CODE)
                 }
@@ -162,6 +172,70 @@ class AddPlaceFragment : Fragment() {
         }).onSameThread().check()
     }
 
+    private fun getLocation() {
+        Dexter.withContext(requireContext()).withPermissions(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ).withListener(object : MultiplePermissionsListener {
+
+            override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                if (report!!.areAllPermissionsGranted()) {
+                    requestLocationData()
+                }
+            }
+
+            override fun onPermissionRationaleShouldBeShown(
+                permissions: MutableList<PermissionRequest>, token: PermissionToken
+            ) {
+                permissionDeniedDialog(requireContext(), requireView())
+            }
+
+        }).onSameThread().check()
+    }
+
+    /** ===================================== Get Location. ===================================== **/
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun isLocationEnabled(): Boolean {
+        val locationManager: LocationManager =
+            activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isLocationEnabled
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun requestLocationData() {
+        val locationRequest = LocationRequest()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.interval = 2000
+        locationRequest.numUpdates = 1
+
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallBack(),
+            Looper.myLooper()
+        )
+    }
+
+    private fun locationCallBack() = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult?) {
+            val lastLocation: Location = locationResult!!.lastLocation
+            latitude = lastLocation.latitude
+            longitude = lastLocation.longitude
+
+            val getAddress = AddressLatLong(requireContext(), latitude, longitude)
+            getAddress.setAddressListener(object : AddressLatLong.AddressListener {
+                override fun onAddressFound(address: String) {
+                    binding.etLocation.setText(address)
+                }
+
+                override fun onError() {
+                    Log.e("Address Error ::", "Something went wrong")
+                }
+            })
+            getAddress.getAddress()
+        }
+    }
+
     /** ===================================== Add place. ===================================== **/
 
     fun pickDate() {
@@ -183,6 +257,17 @@ class AddPlaceFragment : Fragment() {
             startActivityForResult(intent, PLACE_REQUEST_CODE)
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    fun getCurrentLocation() {
+        when (!isLocationEnabled()) {
+            true -> {
+                snackBarMsg(requireView(), "Your location provider is off. Please turn it on.")
+                startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+            }
+            false -> getLocation()
         }
     }
 

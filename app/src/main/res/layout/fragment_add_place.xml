@@ -18,7 +18,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp"
             tools:context=".ui.AddPlaceFragment">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -26,10 +25,15 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
                 app:boxStrokeColor="@color/primaryColor"
+                app:layout_constraintBottom_toTopOf="@+id/tilDescription"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etTitle"
@@ -46,8 +50,11 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
                 app:boxStrokeColor="@color/primaryColor"
+                app:layout_constraintBottom_toTopOf="@+id/tilDate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tilTitle">
@@ -67,8 +74,11 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
                 app:boxStrokeColor="@color/primaryColor"
+                app:layout_constraintBottom_toTopOf="@+id/tilLocation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tilDescription">
@@ -91,8 +101,11 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
                 app:boxStrokeColor="@color/primaryColor"
+                app:layout_constraintBottom_toTopOf="@+id/btnAddCurrentLocation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tilDate">
@@ -110,18 +123,37 @@
                     android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddCurrentLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:onClick="@{() -> addPlaceFragment.getCurrentLocation()}"
+                android:padding="10dp"
+                android:text="@string/add_place_btn_current_location"
+                android:textColor="@color/primaryColor"
+                android:textSize="18sp"
+                app:backgroundTint="@color/backgroundColor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.812"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tilLocation" />
+
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivPlaceImage"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/shape_image_view_border"
-                android:padding="10dp"
+                android:padding="5dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_image"
                 app:layout_constraintBottom_toTopOf="@+id/btnSave"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tilLocation" />
+                app:layout_constraintTop_toBottomOf="@+id/btnAddCurrentLocation" />
 
             <TextView
                 android:id="@+id/tvAddImage"
@@ -136,13 +168,15 @@
                 app:layout_constraintBottom_toBottomOf="@+id/ivPlaceImage"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/ivPlaceImage"
-                app:layout_constraintTop_toBottomOf="@+id/tilLocation" />
+                app:layout_constraintTop_toBottomOf="@+id/btnAddCurrentLocation" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:onClick="@{() -> addPlaceFragment.savePlace()}"
                 android:padding="13dp"
                 android:text="@string/add_place_btn_save"
@@ -152,7 +186,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ivPlaceImage" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

@@ -26,10 +26,15 @@ import com.anibalventura.myplaces.databinding.FragmentAddPlaceBinding
 import com.anibalventura.myplaces.utils.Constants.CAMERA_REQUEST_CODE
 import com.anibalventura.myplaces.utils.Constants.GALLERY_REQUEST_CODE
 import com.anibalventura.myplaces.utils.Constants.PLACE_ADDING
+import com.anibalventura.myplaces.utils.Constants.PLACE_REQUEST_CODE
 import com.anibalventura.myplaces.utils.discardDialog
 import com.anibalventura.myplaces.utils.permissionDeniedDialog
 import com.anibalventura.myplaces.utils.saveImageToInternalStorage
 import com.anibalventura.myplaces.utils.snackBarMsg
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -57,6 +62,10 @@ class AddPlaceFragment : Fragment() {
         binding.addPlaceFragment = this
         binding.lifecycleOwner = this
 
+        if (!Places.isInitialized()) {
+            Places.initialize(requireContext(), getString(R.string.google_maps_key))
+        }
+
         onBackPressed()
 
         return binding.root
@@ -72,10 +81,11 @@ class AddPlaceFragment : Fragment() {
                 try {
                     if (data!!.data != null) {
                         val dataUri = data.data
-                        val pickedImageBitmap =
-                            MediaStore.Images.Media.getBitmap(
-                                requireContext().contentResolver, dataUri
-                            )
+
+                        @Suppress("DEPRECATION")
+                        val pickedImageBitmap = MediaStore.Images.Media.getBitmap(
+                            requireContext().contentResolver, dataUri
+                        )
 
                         image = saveImageToInternalStorage(requireContext(), pickedImageBitmap)
                         binding.ivPlaceImage.setImageURI(dataUri)
@@ -93,6 +103,13 @@ class AddPlaceFragment : Fragment() {
                 } catch (e: IOException) {
                     snackBarMsg(requireView(), e.printStackTrace().toString())
                 }
+            }
+            requestCode == PLACE_REQUEST_CODE -> {
+                val place: Place = Autocomplete.getPlaceFromIntent(data!!)
+
+                binding.etLocation.setText(place.address)
+                latitude = place.latLng!!.latitude
+                longitude = place.latLng!!.longitude
             }
         }
     }
@@ -153,6 +170,19 @@ class AddPlaceFragment : Fragment() {
                 val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
                 binding.etDate.setText(sdf.format(date.time).toString())
             }
+        }
+    }
+
+    fun addLocation() {
+        try {
+            val fields =
+                listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS)
+            val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
+                .build(requireContext())
+
+            startActivityForResult(intent, PLACE_REQUEST_CODE)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

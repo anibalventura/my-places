@@ -35,7 +35,7 @@
                     android:id="@+id/etTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/add_place_input_title"
+                    android:hint="@string/place_input_title"
                     android:inputType="textCapWords"
                     android:textColorHint="@color/secondaryTextColor"
                     android:textSize="18sp" />
@@ -56,7 +56,7 @@
                     android:id="@+id/etDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/add_place_input_description"
+                    android:hint="@string/place_input_description"
                     android:inputType="textCapWords"
                     android:textColorHint="@color/secondaryTextColor"
                     android:textSize="18sp" />
@@ -79,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="@string/add_place_input_date"
+                    android:hint="@string/place_input_date"
                     android:inputType="textCapWords"
                     android:onClick="@{() -> addPlaceFragment.pickDate()}"
                     android:textColorHint="@color/secondaryTextColor"
@@ -101,8 +101,11 @@
                     android:id="@+id/etLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/add_place_input_location"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/place_input_location"
                     android:inputType="textCapWords"
+                    android:onClick="@{() -> addPlaceFragment.addLocation()}"
                     android:textColorHint="@color/secondaryTextColor"
                     android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>

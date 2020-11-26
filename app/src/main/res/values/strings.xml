@@ -2,12 +2,12 @@
     <string name="app_name">My Places</string>
     <string name="places_floating_button">Floating Button</string>
     <string name="add_place">Add Place</string>
-    <string name="add_place_input_title">Title</string>
-    <string name="add_place_input_description">Description</string>
-    <string name="add_place_input_date">Date</string>
+    <string name="place_input_title">Title</string>
+    <string name="place_input_description">Description</string>
+    <string name="place_input_date">Date</string>
     <string name="add_place_add_image">Add Image</string>
     <string name="add_place_btn_save">Save</string>
-    <string name="add_place_input_location">Location</string>
+    <string name="place_input_location">Location</string>
     <string name="dialog_permission_denied">Permission Denied</string>
     <string name="dialog_permission_denied_msg">You denied a permission required for this feature. It can be enabled under the Applications Settings.</string>
     <string name="dialog_go_to_settings">GO TO SETTINGS</string>
@@ -19,10 +19,14 @@
     <string name="edit_place">Edit Place</string>
     <string name="dialog_discard">Discard changes?</string>
     <string name="dialog_discard_confirmation">Are you sure? Your changes won\'t be save.</string>
-    <string name="dialog_discard_successful">Changes discarded</string>
+    <string name="dialog_discard_successful">Changes discarded.</string>
     <string name="dialog_confirmation">Yes</string>
     <string name="dialog_negative" translatable="false">No</string>
     <string name="update_successful">Successfully updated.</string>
     <string name="edit_place_btn_update">Update</string>
     <string name="dialog_place_not_saved">Place not saved.</string>
+    <string name="dialog_delete_forever">Delete forever</string>
+    <string name="dialog_delete_confirmation">Are you sure? This is permanently.</string>
+    <string name="successfully_deleted_forever">Successfully deleted forever.</string>
+    <string name="edit_place_change_image">Change Image</string>
 </resources>

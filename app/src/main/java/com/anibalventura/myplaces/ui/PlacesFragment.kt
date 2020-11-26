@@ -12,6 +12,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.LayoutMode
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.anibalventura.myplaces.R
 import com.anibalventura.myplaces.adapters.PlaceAdapter
 import com.anibalventura.myplaces.data.model.PlaceModel
@@ -20,6 +23,7 @@ import com.anibalventura.myplaces.databinding.FragmentPlacesBinding
 import com.anibalventura.myplaces.utils.Constants.SWIPE_DELETE
 import com.anibalventura.myplaces.utils.Constants.SWIPE_EDIT
 import com.anibalventura.myplaces.utils.SwipeItem
+import com.anibalventura.myplaces.utils.snackBarMsg
 import jp.wasabeef.recyclerview.animators.LandingAnimator
 
 class PlacesFragment : Fragment() {
@@ -91,7 +95,7 @@ class PlacesFragment : Fragment() {
                     SWIPE_DELETE -> swipeDelete(placeItem)
                 }
 
-                adapter.notifyItemRemoved(viewHolder.adapterPosition)
+                adapter.notifyDataSetChanged()
             }
         }
 
@@ -106,7 +110,16 @@ class PlacesFragment : Fragment() {
     }
 
     private fun swipeDelete(placeItem: PlaceModel) {
-        placeViewModel.deleteItem(placeItem)
+        MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+            icon(R.drawable.ic_delete_forever)
+            title(R.string.dialog_delete_forever)
+            message(R.string.dialog_delete_confirmation)
+            positiveButton(R.string.dialog_confirmation) {
+                placeViewModel.deleteItem(placeItem)
+                snackBarMsg(requireView(), getString(R.string.successfully_deleted_forever))
+            }
+            negativeButton(R.string.dialog_negative)
+        }
     }
 
     /** ===================================== Fragment exit/close ===================================== **/

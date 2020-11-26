@@ -29,4 +29,5 @@
     <string name="dialog_delete_confirmation">Are you sure? This is permanently.</string>
     <string name="successfully_deleted_forever">Successfully deleted forever.</string>
     <string name="edit_place_change_image">Change Image</string>
+    <string name="place_detail_btn_view_map">View On Map</string>
 </resources>

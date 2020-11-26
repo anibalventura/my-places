@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.placesFragment -> setToolBarView(toolBar, true, false)
                 R.id.addPlaceFragment -> setToolBarView(toolBar, true, true)
                 R.id.placeDetailFragment -> setToolBarView(toolBar, true, true)
+                R.id.mapFragment -> setToolBarView(toolBar, false, true)
             }
         }
     }

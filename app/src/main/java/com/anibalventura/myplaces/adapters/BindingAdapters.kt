@@ -7,7 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import com.anibalventura.myplaces.R
 import com.anibalventura.myplaces.data.model.PlaceModel
+import com.anibalventura.myplaces.ui.PlaceDetailFragmentDirections
 import com.anibalventura.myplaces.ui.PlacesFragmentDirections
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class BindingAdapters {
@@ -40,6 +42,18 @@ class BindingAdapters {
             view.setOnClickListener {
                 val action =
                     PlacesFragmentDirections.actionPlacesFragmentToPlaceDetailFragment(currentItem)
+                view.findNavController().navigate(action)
+            }
+        }
+
+        @JvmStatic
+        @BindingAdapter("android:sendDataToMapsFragment")
+        fun sendDataToMapsFragment(view: MaterialButton, currentItem: PlaceModel) {
+            view.setOnClickListener {
+                val action =
+                    PlaceDetailFragmentDirections.actionPlaceDetailFragmentToMapFragment(
+                        currentItem
+                    )
                 view.findNavController().navigate(action)
             }
         }

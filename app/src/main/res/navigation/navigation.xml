@@ -43,6 +43,10 @@
         <argument
             android:name="currentItem"
             app:argType="com.anibalventura.myplaces.data.model.PlaceModel" />
+        <action
+            android:id="@+id/action_placeDetailFragment_to_mapFragment"
+            app:destination="@id/mapFragment"
+            app:popUpTo="@id/placeDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/editPlaceFragment"
@@ -52,6 +56,14 @@
         <action
             android:id="@+id/action_editPlaceFragment_to_placesFragment"
             app:destination="@id/placesFragment" />
+        <argument
+            android:name="currentItem"
+            app:argType="com.anibalventura.myplaces.data.model.PlaceModel" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.anibalventura.myplaces.ui.MapFragment"
+        tools:layout="@layout/fragment_map">
         <argument
             android:name="currentItem"
             app:argType="com.anibalventura.myplaces.data.model.PlaceModel" />

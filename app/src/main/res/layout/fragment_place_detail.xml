@@ -8,6 +8,10 @@
         <variable
             name="args"
             type="com.anibalventura.myplaces.ui.PlaceDetailFragmentArgs" />
+
+        <variable
+            name="placeModel"
+            type="com.anibalventura.myplaces.data.model.PlaceModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -80,6 +84,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvDetailDescription"
             tools:text="Location" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnViewOnMap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:padding="13dp"
+            android:sendDataToMapsFragment="@{placeModel}"
+            android:text="@string/place_detail_btn_view_map"
+            android:textSize="18sp"
+            app:backgroundTint="@color/primaryColor"
+            app:cornerRadius="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDetailLocation" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -221,7 +221,7 @@ class AddPlaceFragment : Fragment() {
                     binding.etDescription.text.toString(),
                     binding.etDate.text.toString(),
                     binding.etLocation.text.toString(),
-                    longitude, latitude, image.toString()
+                    latitude, longitude, image.toString()
                 )
 
                 placeViewModel.insertItem(placeModel)

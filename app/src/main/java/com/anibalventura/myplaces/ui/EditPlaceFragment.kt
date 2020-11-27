@@ -96,7 +96,7 @@ class EditPlaceFragment : Fragment() {
                 try {
                     if (data!!.data != null) {
                         val dataUri = data.data
-                        val pickedImageBitmap =
+                        @Suppress("DEPRECATION") val pickedImageBitmap =
                             MediaStore.Images.Media.getBitmap(
                                 requireContext().contentResolver, dataUri
                             )
@@ -181,10 +181,11 @@ class EditPlaceFragment : Fragment() {
     }
 
     fun editImage() {
-        val actionsItems = listOf("Add from gallery", "Capture from camera")
+        val actionsItems =
+            listOf(getString(R.string.image_from_gallery), getString(R.string.image_from_camera))
 
         MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
-            title(R.string.add_place_add_image)
+            title(R.string.place_add_image)
             listItems(items = actionsItems) { _, index, _ ->
                 when (index) {
                     0 -> pickImageFromGallery()
@@ -212,7 +213,7 @@ class EditPlaceFragment : Fragment() {
 
         placeViewModel.updateItem(currentItem)
 
-        snackBarMsg(requireView(), getString(R.string.update_successful))
+        snackBarMsg(requireView(), getString(R.string.snackbar_place_update))
         findNavController().navigate(R.id.action_editPlaceFragment_to_placesFragment)
     }
 

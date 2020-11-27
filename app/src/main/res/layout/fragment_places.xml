@@ -38,8 +38,10 @@
             android:focusable="true"
             android:navigateToPlaceAddFragment="@{true}"
             android:src="@drawable/ic_add"
+            app:backgroundTint="@color/secondaryColor"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@android:color/white" />
 
         <ImageView
             android:id="@+id/ivNoNotes"
@@ -54,14 +56,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.40"
-            app:tint="@color/primaryColor" />
+            app:tint="@color/secondaryColor" />
 
         <TextView
             android:id="@+id/tvNoNotes"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:emptyDatabase="@{placeViewModel.emptyDatabase}"
-            android:text="@string/place_no_data"
+            android:text="@string/places_no_data"
             android:textSize="18sp"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"

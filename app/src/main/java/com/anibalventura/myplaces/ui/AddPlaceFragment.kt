@@ -264,7 +264,7 @@ class AddPlaceFragment : Fragment() {
     fun getCurrentLocation() {
         when (!isLocationEnabled()) {
             true -> {
-                snackBarMsg(requireView(), "Your location provider is off. Please turn it on.")
+                snackBarMsg(requireView(), getString(R.string.snackbar_location_off))
                 startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
             }
             false -> getLocation()
@@ -272,10 +272,11 @@ class AddPlaceFragment : Fragment() {
     }
 
     fun addImage() {
-        val actionsItems = listOf("Add from gallery", "Capture from camera")
+        val actionsItems =
+            listOf(getString(R.string.image_from_gallery), getString(R.string.image_from_camera))
 
         MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
-            title(R.string.add_place_add_image)
+            title(R.string.place_add_image)
             listItems(items = actionsItems) { _, index, _ ->
                 when (index) {
                     0 -> pickImageFromGallery()
@@ -288,18 +289,18 @@ class AddPlaceFragment : Fragment() {
     fun savePlace() {
         when {
             binding.etTitle.text.isNullOrEmpty() -> snackBarMsg(
-                requireView(), "Please enter a Title."
+                requireView(), getString(R.string.snackbar_empty_title)
             )
             binding.etDescription.text.isNullOrEmpty() -> snackBarMsg(
-                requireView(), "Please enter a Description."
+                requireView(), getString(R.string.snackbar_empty_description)
             )
             binding.etDate.text.isNullOrEmpty() -> snackBarMsg(
-                requireView(), "Please enter a Date."
+                requireView(), getString(R.string.snackbar_empty_date)
             )
             binding.etLocation.text.isNullOrEmpty() -> snackBarMsg(
-                requireView(), "Please enter a Location."
+                requireView(), getString(R.string.snackbar_empty_location)
             )
-            image == null -> snackBarMsg(requireView(), "Please add an Image.")
+            image == null -> snackBarMsg(requireView(), getString(R.string.snackbar_empty_image))
             else -> {
                 val placeModel = PlaceModel(
                     0, binding.etTitle.text.toString(),
@@ -311,7 +312,7 @@ class AddPlaceFragment : Fragment() {
 
                 placeViewModel.insertItem(placeModel)
                 findNavController().navigate(R.id.action_addPlaceFragment_to_placesFragment)
-                snackBarMsg(requireView(), "Place added.")
+                snackBarMsg(requireView(), getString(R.string.snackbar_add_place))
             }
         }
     }

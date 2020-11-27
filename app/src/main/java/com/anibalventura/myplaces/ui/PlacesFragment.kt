@@ -116,7 +116,7 @@ class PlacesFragment : Fragment() {
             message(R.string.dialog_delete_confirmation)
             positiveButton(R.string.dialog_confirmation) {
                 placeViewModel.deleteItem(placeItem)
-                snackBarMsg(requireView(), getString(R.string.successfully_deleted_forever))
+                snackBarMsg(requireView(), getString(R.string.snackbar_deleted_forever))
             }
             negativeButton(R.string.dialog_negative)
         }

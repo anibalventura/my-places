@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="places_floating_button">Botón Flotante</string>
+    <string name="add_place">Añadir Lugar</string>
+    <string name="place_input_title">Título</string>
+    <string name="place_input_description">Descripción</string>
+    <string name="place_input_date">Fecha</string>
+    <string name="place_add_image">Añadir Imagen</string>
+    <string name="place_btn_save">Guardar</string>
+    <string name="place_input_location">Ubicación</string>
+    <string name="dialog_permission_denied">Permiso Denegado</string>
+    <string name="dialog_permission_denied_msg">Negaste un permiso requerido para esta función. Puede habilitarlo en la Configuración de la Aplicaciones.</string>
+    <string name="dialog_go_to_settings">IR A CONFIGURACIÓN</string>
+    <string name="dialog_cancel">Cancelar</string>
+    <string name="place_image">Imagen de Lugar</string>
+    <string name="no_places">No hay lugares</string>
+    <string name="places_no_data">Empieza añadiendo tus lugares!</string>
+    <string name="place_detail">Detalles del Lugar</string>
+    <string name="edit_place">Editar Lugar</string>
+    <string name="dialog_discard">¿Descartar los cambios?</string>
+    <string name="dialog_discard_confirmation">¿Estás seguro? Tus cambios no se guardarán.</string>
+    <string name="snackbar_discard">Cambios descartados.</string>
+    <string name="dialog_confirmation">Si</string>
+    <string name="snackbar_place_update">Lugar actualizado.</string>
+    <string name="edit_place_btn_update">Actualizar</string>
+    <string name="snackbar_place_not_saved">Lugar no guardado.</string>
+    <string name="dialog_delete_forever">Eliminar lugar.</string>
+    <string name="dialog_delete_confirmation">¿Estás seguro? Esto es de forma permanente.</string>
+    <string name="snackbar_deleted_forever">Lugar eliminado.</string>
+    <string name="edit_place_change_image">Cambiar Imagen</string>
+    <string name="place_detail_btn_view_map">Ver en Mapa</string>
+    <string name="place_btn_current_location">Añadir Ubicación Actual</string>
+    <string name="snackbar_location_off">Tu proveedor de ubicación está desactivado. Enciéndelo.</string>
+    <string name="image_from_gallery">Desde la galería</string>
+    <string name="image_from_camera">Desde la cámara</string>
+    <string name="snackbar_empty_title">Ingrese un título.</string>
+    <string name="snackbar_empty_description">Ingrese una descripción.</string>
+    <string name="snackbar_empty_date">Ingrese una fecha.</string>
+    <string name="snackbar_empty_location">Ingrese una ubicación.</string>
+    <string name="snackbar_empty_image">Agregue una imagen.</string>
+    <string name="snackbar_add_place">Lugar añadido.</string>
+</resources>

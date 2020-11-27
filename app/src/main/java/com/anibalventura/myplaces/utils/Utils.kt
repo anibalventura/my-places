@@ -73,12 +73,12 @@ fun discardDialog(mode: String, context: Context, view: View) {
                 PLACE_EDITING -> {
                     view.findNavController()
                         .navigate(R.id.action_editPlaceFragment_to_placesFragment)
-                    snackBarMsg(view, res.getString(R.string.dialog_discard_successful))
+                    snackBarMsg(view, res.getString(R.string.snackbar_discard))
                 }
                 PLACE_ADDING -> {
                     view.findNavController()
                         .navigate(R.id.action_addPlaceFragment_to_placesFragment)
-                    snackBarMsg(view, res.getString(R.string.dialog_place_not_saved))
+                    snackBarMsg(view, res.getString(R.string.snackbar_place_not_saved))
                 }
             }
         }

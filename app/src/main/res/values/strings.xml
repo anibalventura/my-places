@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">My Places</string>
+    <string name="app_name" translatable="false">My Places</string>
     <string name="places_floating_button">Floating Button</string>
     <string name="add_place">Add Place</string>
     <string name="place_input_title">Title</string>
     <string name="place_input_description">Description</string>
     <string name="place_input_date">Date</string>
-    <string name="add_place_add_image">Add Image</string>
-    <string name="add_place_btn_save">Save</string>
+    <string name="place_add_image">Add Image</string>
+    <string name="place_btn_save">Save</string>
     <string name="place_input_location">Location</string>
     <string name="dialog_permission_denied">Permission Denied</string>
     <string name="dialog_permission_denied_msg">You denied a permission required for this feature. It can be enabled under the Applications Settings.</string>
@@ -14,21 +14,30 @@
     <string name="dialog_cancel">Cancel</string>
     <string name="place_image">Place Image</string>
     <string name="no_places">No Places</string>
-    <string name="place_no_data">Start to add your places!</string>
+    <string name="places_no_data">Start to add your places!</string>
     <string name="place_detail">Place Detail</string>
     <string name="edit_place">Edit Place</string>
     <string name="dialog_discard">Discard changes?</string>
     <string name="dialog_discard_confirmation">Are you sure? Your changes won\'t be save.</string>
-    <string name="dialog_discard_successful">Changes discarded.</string>
+    <string name="snackbar_discard">Changes discarded.</string>
     <string name="dialog_confirmation">Yes</string>
     <string name="dialog_negative" translatable="false">No</string>
-    <string name="update_successful">Successfully updated.</string>
+    <string name="snackbar_place_update">Place updated.</string>
     <string name="edit_place_btn_update">Update</string>
-    <string name="dialog_place_not_saved">Place not saved.</string>
-    <string name="dialog_delete_forever">Delete forever</string>
+    <string name="snackbar_place_not_saved">Place not saved.</string>
+    <string name="dialog_delete_forever">Delete Place.</string>
     <string name="dialog_delete_confirmation">Are you sure? This is permanently.</string>
-    <string name="successfully_deleted_forever">Successfully deleted forever.</string>
+    <string name="snackbar_deleted_forever">Place deleted.</string>
     <string name="edit_place_change_image">Change Image</string>
     <string name="place_detail_btn_view_map">View On Map</string>
-    <string name="add_place_btn_current_location">Add Current Location</string>
+    <string name="place_btn_current_location">Add Current Location</string>
+    <string name="snackbar_location_off">Your location provider is off. Please turn it on.</string>
+    <string name="image_from_gallery">From gallery</string>
+    <string name="image_from_camera">From camera</string>
+    <string name="snackbar_empty_title">Please enter a title.</string>
+    <string name="snackbar_empty_description">Please enter a description.</string>
+    <string name="snackbar_empty_date">Please enter a date.</string>
+    <string name="snackbar_empty_location">Please enter a location.</string>
+    <string name="snackbar_empty_image">Please add an image.</string>
+    <string name="snackbar_add_place">Place added.</string>
 </resources>

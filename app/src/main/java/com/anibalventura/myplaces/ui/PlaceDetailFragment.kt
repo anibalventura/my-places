@@ -21,6 +21,8 @@ class PlaceDetailFragment : Fragment() {
     ): View {
         _binding = FragmentPlaceDetailBinding.inflate(inflater, container, false)
         binding.args = args
+        binding.lifecycleOwner = this
+
         binding.placeModel = PlaceModel(
             args.currentItem.id,
             args.currentItem.title,
@@ -31,7 +33,6 @@ class PlaceDetailFragment : Fragment() {
             args.currentItem.longitude,
             args.currentItem.image
         )
-        binding.lifecycleOwner = this
 
         return binding.root
     }

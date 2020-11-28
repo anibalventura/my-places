@@ -19,7 +19,6 @@
     <string name="edit_place">Editar Lugar</string>
     <string name="dialog_discard">¿Descartar los cambios?</string>
     <string name="dialog_discard_confirmation">¿Estás seguro? Tus cambios no se guardarán.</string>
-    <string name="snackbar_discard">Cambios descartados.</string>
     <string name="dialog_confirmation">Si</string>
     <string name="snackbar_place_update">Lugar actualizado.</string>
     <string name="edit_place_btn_update">Actualizar</string>
@@ -39,4 +38,5 @@
     <string name="snackbar_empty_location">Ingrese una ubicación.</string>
     <string name="snackbar_empty_image">Agregue una imagen.</string>
     <string name="snackbar_add_place">Lugar añadido.</string>
+    <string name="snackbar_location_error">No se pudo obtener la ubicación.</string>
 </resources>

@@ -14,29 +14,32 @@ import android.os.Bundle
 import android.os.Looper
 import android.provider.MediaStore
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.datetime.datePicker
 import com.afollestad.materialdialogs.list.listItems
 import com.anibalventura.myplaces.R
+import com.anibalventura.myplaces.adapters.PlaceAdapter
 import com.anibalventura.myplaces.data.model.PlaceModel
 import com.anibalventura.myplaces.data.viewmodel.PlaceViewModel
 import com.anibalventura.myplaces.databinding.FragmentAddPlaceBinding
-import com.anibalventura.myplaces.utils.*
+import com.anibalventura.myplaces.utils.AddressLatLong
 import com.anibalventura.myplaces.utils.Constants.CAMERA_REQUEST_CODE
 import com.anibalventura.myplaces.utils.Constants.GALLERY_REQUEST_CODE
-import com.anibalventura.myplaces.utils.Constants.PLACE_ADDING
 import com.anibalventura.myplaces.utils.Constants.PLACE_REQUEST_CODE
+import com.anibalventura.myplaces.utils.saveImageToInternalStorage
+import com.anibalventura.myplaces.utils.snackBarMsg
 import com.google.android.gms.location.*
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
@@ -57,12 +60,18 @@ class AddPlaceFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val placeViewModel: PlaceViewModel by viewModels()
+    private lateinit var currentItem: PlaceModel
+    private lateinit var placeItem: PlaceModel
 
-    private var image: Uri? = null
+    private val args by navArgs<AddPlaceFragmentArgs>()
+
+    private val adapter: PlaceAdapter by lazy { PlaceAdapter() }
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var image: Uri? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -70,8 +79,9 @@ class AddPlaceFragment : Fragment() {
         _binding = FragmentAddPlaceBinding.inflate(inflater, container, false)
         binding.addPlaceFragment = this
         binding.lifecycleOwner = this
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+
+        if (arguments != null) setEditPlace() else setAddPlace()
 
         if (!Places.isInitialized()) {
             Places.initialize(requireContext(), getString(R.string.google_maps_key))
@@ -142,9 +152,7 @@ class AddPlaceFragment : Fragment() {
 
             override fun onPermissionRationaleShouldBeShown(
                 permissions: MutableList<PermissionRequest>, token: PermissionToken
-            ) {
-                permissionDeniedDialog(requireContext(), requireView())
-            }
+            ) = permissionDeniedDialog()
 
         }).onSameThread().check()
     }
@@ -165,9 +173,7 @@ class AddPlaceFragment : Fragment() {
 
             override fun onPermissionRationaleShouldBeShown(
                 permissions: MutableList<PermissionRequest>, token: PermissionToken
-            ) {
-                permissionDeniedDialog(requireContext(), requireView())
-            }
+            ) = permissionDeniedDialog()
 
         }).onSameThread().check()
     }
@@ -179,18 +185,32 @@ class AddPlaceFragment : Fragment() {
         ).withListener(object : MultiplePermissionsListener {
 
             override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                if (report!!.areAllPermissionsGranted()) {
-                    requestLocationData()
-                }
+                if (report!!.areAllPermissionsGranted()) requestLocationData()
             }
 
             override fun onPermissionRationaleShouldBeShown(
                 permissions: MutableList<PermissionRequest>, token: PermissionToken
-            ) {
-                permissionDeniedDialog(requireContext(), requireView())
-            }
+            ) = permissionDeniedDialog()
 
         }).onSameThread().check()
+    }
+
+    private fun permissionDeniedDialog() {
+        MaterialDialog(requireContext()).show {
+            title(R.string.dialog_permission_denied)
+            message(R.string.dialog_permission_denied_msg)
+            negativeButton(R.string.dialog_cancel)
+            positiveButton(R.string.dialog_go_to_settings) {
+                try {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    intent.data = Uri.fromParts("package", "packageName", null)
+                    ContextCompat.startActivity(context, intent, null)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    snackBarMsg(view, e.printStackTrace().toString())
+                }
+            }
+        }
     }
 
     /** ===================================== Get Location. ===================================== **/
@@ -229,14 +249,19 @@ class AddPlaceFragment : Fragment() {
                 }
 
                 override fun onError() {
-                    Log.e("Address Error ::", "Something went wrong")
+                    snackBarMsg(requireView(), getString(R.string.snackbar_location_error))
                 }
             })
+
             getAddress.getAddress()
         }
     }
 
     /** ===================================== Add place. ===================================== **/
+
+    private fun setAddPlace() {
+        binding.btnSave.setOnClickListener { savePlace() }
+    }
 
     fun pickDate() {
         MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
@@ -286,23 +311,20 @@ class AddPlaceFragment : Fragment() {
         }
     }
 
-    fun savePlace() {
+    private fun savePlace() {
         when {
-            binding.etTitle.text.isNullOrEmpty() -> snackBarMsg(
-                requireView(), getString(R.string.snackbar_empty_title)
-            )
-            binding.etDescription.text.isNullOrEmpty() -> snackBarMsg(
-                requireView(), getString(R.string.snackbar_empty_description)
-            )
-            binding.etDate.text.isNullOrEmpty() -> snackBarMsg(
-                requireView(), getString(R.string.snackbar_empty_date)
-            )
-            binding.etLocation.text.isNullOrEmpty() -> snackBarMsg(
-                requireView(), getString(R.string.snackbar_empty_location)
-            )
-            image == null -> snackBarMsg(requireView(), getString(R.string.snackbar_empty_image))
+            binding.etTitle.text.isNullOrEmpty() ->
+                snackBarMsg(requireView(), getString(R.string.snackbar_empty_title))
+            binding.etDescription.text.isNullOrEmpty() ->
+                snackBarMsg(requireView(), getString(R.string.snackbar_empty_description))
+            binding.etDate.text.isNullOrEmpty() ->
+                snackBarMsg(requireView(), getString(R.string.snackbar_empty_date))
+            binding.etLocation.text.isNullOrEmpty() ->
+                snackBarMsg(requireView(), getString(R.string.snackbar_empty_location))
+            image == null ->
+                snackBarMsg(requireView(), getString(R.string.snackbar_empty_image))
             else -> {
-                val placeModel = PlaceModel(
+                val item = PlaceModel(
                     0, binding.etTitle.text.toString(),
                     binding.etDescription.text.toString(),
                     binding.etDate.text.toString(),
@@ -310,20 +332,81 @@ class AddPlaceFragment : Fragment() {
                     latitude, longitude, image.toString()
                 )
 
-                placeViewModel.insertItem(placeModel)
+                placeViewModel.insertItem(item)
                 findNavController().navigate(R.id.action_addPlaceFragment_to_placesFragment)
                 snackBarMsg(requireView(), getString(R.string.snackbar_add_place))
             }
         }
     }
 
-    /** ===================================== Fragment exit/close ===================================== **/
+
+    /** ===================================== Edit Place. ===================================== **/
+
+    private fun setEditPlace() {
+        (activity as MainActivity).supportActionBar?.title = getString(R.string.edit_place)
+        binding.etTitle.setText(args.currentItem.title)
+        binding.etDescription.setText(args.currentItem.description)
+        binding.etDate.setText(args.currentItem.date)
+        binding.etLocation.setText(args.currentItem.location)
+        binding.ivPlaceImage.setImageURI(Uri.parse(args.currentItem.image))
+        binding.btnSave.text = getString(R.string.edit_place_btn_update)
+        binding.btnSave.setOnClickListener { updatePlace() }
+
+        placeViewModel.getDatabase.observe(viewLifecycleOwner, { data ->
+            placeViewModel.checkIfPlacesIsEmpty(data)
+            adapter.setData(data)
+        })
+
+        placeItem = PlaceModel(
+            args.currentItem.id,
+            args.currentItem.title,
+            args.currentItem.description,
+            args.currentItem.date,
+            args.currentItem.location,
+            args.currentItem.latitude,
+            args.currentItem.longitude,
+            args.currentItem.image
+        )
+    }
+
+    private fun updatePlace() {
+        if (image == null) image = Uri.parse(args.currentItem.image)
+
+        currentItem = PlaceModel(
+            args.currentItem.id,
+            binding.etTitle.text.toString(),
+            binding.etDescription.text.toString(),
+            binding.etDate.text.toString(),
+            binding.etLocation.text.toString(),
+            latitude, longitude, image.toString()
+        )
+
+        placeViewModel.updateItem(currentItem)
+
+        snackBarMsg(requireView(), getString(R.string.snackbar_place_update))
+        findNavController().navigate(R.id.action_addPlaceFragment_to_placesFragment)
+    }
+
+    /** =================================== Fragment exit/close =================================== **/
 
     private fun onBackPressed() {
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner,
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    discardDialog(PLACE_ADDING, requireContext(), requireView())
+                    MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+                        title(R.string.dialog_discard)
+                        message(R.string.dialog_discard_confirmation)
+                        positiveButton(R.string.dialog_confirmation) {
+                            snackBarMsg(requireView(), getString(R.string.snackbar_place_not_saved))
+
+                            if (isEnabled) {
+                                isEnabled = false
+                                requireActivity().onBackPressed()
+                            }
+                        }
+                        negativeButton(R.string.dialog_negative)
+                    }
                 }
             })
     }

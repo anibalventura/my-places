@@ -19,7 +19,6 @@
     <string name="edit_place">Edit Place</string>
     <string name="dialog_discard">Discard changes?</string>
     <string name="dialog_discard_confirmation">Are you sure? Your changes won\'t be save.</string>
-    <string name="snackbar_discard">Changes discarded.</string>
     <string name="dialog_confirmation">Yes</string>
     <string name="dialog_negative" translatable="false">No</string>
     <string name="snackbar_place_update">Place updated.</string>
@@ -40,4 +39,5 @@
     <string name="snackbar_empty_location">Please enter a location.</string>
     <string name="snackbar_empty_image">Please add an image.</string>
     <string name="snackbar_add_place">Place added.</string>
+    <string name="snackbar_location_error">Cannot get location.</string>
 </resources>

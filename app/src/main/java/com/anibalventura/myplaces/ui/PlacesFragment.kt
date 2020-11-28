@@ -105,7 +105,7 @@ class PlacesFragment : Fragment() {
 
     private fun swipeEdit(placeItem: PlaceModel) {
         findNavController().navigate(
-            PlacesFragmentDirections.actionPlacesFragmentToEditPlaceFragment(placeItem)
+            PlacesFragmentDirections.actionPlacesFragmentToAddPlacesFragment(placeItem)
         )
     }
 

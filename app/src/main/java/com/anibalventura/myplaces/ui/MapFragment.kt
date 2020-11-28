@@ -28,10 +28,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
 
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(this)
+        supportMap()
 
         return binding.root
+    }
+
+    /** ===================================== Map. ===================================== **/
+
+    private fun supportMap() {
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        mapFragment?.getMapAsync(this)
     }
 
     override fun onMapReady(googleMap: GoogleMap?) {
@@ -40,7 +46,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 10f))
     }
 
-    /** ===================================== Fragment exit/close ===================================== **/
+    /** ===================================== Fragment exit/close. ===================================== **/
 
     override fun onDestroy() {
         _binding = null

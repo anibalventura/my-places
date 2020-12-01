@@ -21,4 +21,7 @@ interface PlaceDao {
 
     @Query("DELETE FROM place_table")
     suspend fun deleteDatabase()
+
+    @Query("SELECT * FROM place_table WHERE title LIKE :searchQuery")
+    fun searchDatabase(searchQuery: String): LiveData<List<PlaceModel>>
 }

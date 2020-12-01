@@ -47,6 +47,10 @@ class PlaceViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun searchDatabase(searchQuery: String): LiveData<List<PlaceModel>> {
+        return repository.searchDatabase(searchQuery)
+    }
+
     /** ========================= Check for empty database. ========================= **/
 
     val emptyDatabase: MutableLiveData<Boolean> = MutableLiveData(false)

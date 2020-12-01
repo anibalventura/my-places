@@ -2,9 +2,8 @@ package com.anibalventura.myplaces.ui
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -26,7 +25,7 @@ import com.anibalventura.myplaces.utils.SwipeItem
 import com.anibalventura.myplaces.utils.snackBarMsg
 import jp.wasabeef.recyclerview.animators.LandingAnimator
 
-class PlacesFragment : Fragment() {
+class PlacesFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private var _binding: FragmentPlacesBinding? = null
     private val binding get() = _binding!!
@@ -49,6 +48,8 @@ class PlacesFragment : Fragment() {
             placeViewModel.checkIfPlacesIsEmpty(data)
             adapter.setData(data)
         })
+
+        setHasOptionsMenu(true)
 
         return binding.root
     }
@@ -120,6 +121,57 @@ class PlacesFragment : Fragment() {
             }
             negativeButton(R.string.dialog_negative)
         }
+    }
+
+    /** ===================================== Options Menu. ===================================== **/
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_places, menu)
+
+        val search = menu.findItem(R.id.menu_main_search).actionView as? SearchView
+        search?.isSubmitButtonEnabled = true
+        search?.setOnQueryTextListener(this)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_main_delete_all -> deleteAllPlaces()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun deleteAllPlaces() {
+        MaterialDialog(requireContext(), BottomSheet(LayoutMode.WRAP_CONTENT)).show {
+            icon(R.drawable.ic_delete_forever)
+            title(R.string.dialog_delete_all)
+            message(R.string.dialog_delete_confirmation)
+            positiveButton(R.string.dialog_confirmation) {
+                placeViewModel.deleteDatabase()
+                snackBarMsg(requireView(), getString(R.string.snackbar_deleted_all))
+            }
+            negativeButton(R.string.dialog_negative)
+        }
+        recyclerView.itemAnimator = LandingAnimator().apply {
+            addDuration = 300 // Milliseconds
+        }
+    }
+
+    // Methods for search option.
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if (query != null) searchTroughDatabase(query)
+        return true
+    }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        if (query != null) searchTroughDatabase(query)
+        return true
+    }
+
+    private fun searchTroughDatabase(query: String) {
+        placeViewModel.searchDatabase("%$query%").observe(this, { list ->
+            list?.let { adapter.setData(it) }
+        })
     }
 
     /** ===================================== Fragment exit/close ===================================== **/

@@ -40,4 +40,9 @@
     <string name="snackbar_empty_image">Please add an image.</string>
     <string name="snackbar_add_place">Place added.</string>
     <string name="snackbar_location_error">Cannot get location.</string>
+    <string name="menu_places_search">Search</string>
+    <string name="menu_overflow" translatable="false">Overflow</string>
+    <string name="menu_places_delete_all">Delete all</string>
+    <string name="dialog_delete_all">Delete All Places</string>
+    <string name="snackbar_deleted_all">All places deleted.</string>
 </resources>

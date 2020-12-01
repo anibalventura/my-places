@@ -23,4 +23,8 @@ class PlaceRepository(private val placeDao: PlaceDao) {
     suspend fun deleteDatabase() {
         placeDao.deleteDatabase()
     }
+
+    fun searchDatabase(searchQuery: String): LiveData<List<PlaceModel>> {
+        return placeDao.searchDatabase(searchQuery)
+    }
 }

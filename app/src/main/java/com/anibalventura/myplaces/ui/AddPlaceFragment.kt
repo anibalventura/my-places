@@ -219,7 +219,12 @@ class AddPlaceFragment : Fragment() {
     private fun isLocationEnabled(): Boolean {
         val locationManager: LocationManager =
             activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isLocationEnabled
+
+        return if (Build.VERSION.SDK_INT >= 28) {
+            locationManager.isLocationEnabled
+        } else {
+            locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -285,8 +290,8 @@ class AddPlaceFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.P)
     fun getCurrentLocation() {
+        @RequiresApi(Build.VERSION_CODES.P)
         when (!isLocationEnabled()) {
             true -> {
                 snackBarMsg(requireView(), getString(R.string.snackbar_location_off))
@@ -333,8 +338,8 @@ class AddPlaceFragment : Fragment() {
                 )
 
                 placeViewModel.insertItem(item)
-                findNavController().navigate(R.id.action_addPlaceFragment_to_placesFragment)
                 snackBarMsg(requireView(), getString(R.string.snackbar_add_place))
+                findNavController().popBackStack()
             }
         }
     }
@@ -384,7 +389,7 @@ class AddPlaceFragment : Fragment() {
         placeViewModel.updateItem(currentItem)
 
         snackBarMsg(requireView(), getString(R.string.snackbar_place_update))
-        findNavController().navigate(R.id.action_addPlaceFragment_to_placesFragment)
+        findNavController().popBackStack()
     }
 
     /** =================================== Fragment exit/close =================================== **/
@@ -399,11 +404,7 @@ class AddPlaceFragment : Fragment() {
                         message(R.string.dialog_discard_confirmation)
                         positiveButton(R.string.dialog_confirmation) {
                             snackBarMsg(requireView(), getString(R.string.snackbar_place_not_saved))
-
-                            if (isEnabled) {
-                                isEnabled = false
-                                requireActivity().onBackPressed()
-                            }
+                            findNavController().popBackStack()
                         }
                         negativeButton(R.string.dialog_negative)
                     }

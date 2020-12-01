@@ -32,11 +32,6 @@
         android:name="com.anibalventura.myplaces.ui.AddPlaceFragment"
         android:label="@string/add_place"
         tools:layout="@layout/fragment_add_place">
-        <action
-            android:id="@+id/action_addPlaceFragment_to_placesFragment"
-            app:destination="@id/placesFragment"
-            app:enterAnim="@anim/animation_from_top"
-            app:exitAnim="@anim/animation_to_bottom" />
         <argument
             android:name="currentItem"
             app:argType="com.anibalventura.myplaces.data.model.PlaceModel" />

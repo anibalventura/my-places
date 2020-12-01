@@ -39,4 +39,8 @@
     <string name="snackbar_empty_image">Agregue una imagen.</string>
     <string name="snackbar_add_place">Lugar añadido.</string>
     <string name="snackbar_location_error">No se pudo obtener la ubicación.</string>
+    <string name="menu_places_search">Buscar</string>
+    <string name="menu_places_delete_all">Eliminar todo</string>
+    <string name="dialog_delete_all">Eliminar todos los lugares</string>
+    <string name="snackbar_deleted_all">Todos los lugares eliminados.</string>
 </resources>

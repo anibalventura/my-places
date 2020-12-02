@@ -220,11 +220,7 @@ class AddPlaceFragment : Fragment() {
         val locationManager: LocationManager =
             activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        return if (Build.VERSION.SDK_INT >= 28) {
-            locationManager.isLocationEnabled
-        } else {
-            locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        }
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isLocationEnabled
     }
 
     @SuppressLint("MissingPermission")
@@ -290,8 +286,8 @@ class AddPlaceFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     fun getCurrentLocation() {
-        @RequiresApi(Build.VERSION_CODES.P)
         when (!isLocationEnabled()) {
             true -> {
                 snackBarMsg(requireView(), getString(R.string.snackbar_location_off))
